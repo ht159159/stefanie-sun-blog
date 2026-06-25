@@ -34,7 +34,7 @@ const navItems = [
   { name: 'about', label: 'About', path: '/about' },
   { name: 'music', label: 'Music', path: '/music' },
   { name: 'picture', label: 'Picture', path: '/picture' },
-  { name: 'join', label: 'Join', path: '/join' }
+  { name: 'join', label: 'JoinSheep', path: '/join' }
 ]
 
 const scrolled = ref(false)
