@@ -1,5 +1,5 @@
 <template>
-  <header class="header" :class="{ 'header--scrolled': scrolled }">
+  <header class="header" :class="{ 'header--scrolled': scrolled, 'header--opaque': !isHome && !scrolled }">
     <div class="header__inner">
       <RouterLink to="/" class="header__logo">
         <span class="logo-first">Stefanie</span>
@@ -27,8 +27,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
-import { RouterLink } from 'vue-router'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { RouterLink, useRoute } from 'vue-router'
 
 const navItems = [
   { name: 'about', label: 'About', path: '/about' },
@@ -37,6 +37,8 @@ const navItems = [
   { name: 'join', label: 'JoinSheep', path: '/join' }
 ]
 
+const route = useRoute()
+const isHome = computed(() => route.path === '/')
 const scrolled = ref(false)
 const menuOpen = ref(false)
 
@@ -71,6 +73,12 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
     .header__menu span {
       background: $white;
     }
+  }
+
+  // 非首頁且未滾動：深色背景，文字保持白色
+  &--opaque {
+    background: rgba($black, 0.88);
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.18);
   }
 
   // 滾動後：白色背景，深色文字
