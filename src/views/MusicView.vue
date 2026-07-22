@@ -18,7 +18,7 @@
           </div>
           <div class="album-card__info">
             <h3>{{ album.title }}</h3>
-            <p>{{ album.year }} · {{ album.description }}</p>
+            <p>{{ album.year }} · {{ $t('albumDesc.' + album.id) }}</p>
           </div>
         </article>
       </div>

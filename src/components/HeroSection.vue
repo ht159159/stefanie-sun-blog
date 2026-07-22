@@ -15,11 +15,11 @@
           <input
             v-model="email"
             type="email"
-            placeholder="Get new music info"
+            :placeholder="$t('hero.placeholder')"
             class="hero__input"
           />
         </form>
-        <p v-if="subscribed" class="hero__thanks">感謝訂閱！</p>
+        <p v-if="subscribed" class="hero__thanks">{{ $t('hero.thanks') }}</p>
       </div>
     </div>
   </section>

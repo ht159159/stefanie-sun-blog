@@ -14,11 +14,11 @@
       </div>
       <div class="card-grid__quote">
         <blockquote class="quote">
-          <p>理智與瘋狂一直是一種在我內心的掙扎。</p>
-          <p>我常常想說，我不可能是單獨的，</p>
-          <p>世界上一定有很多跟我一樣的人，</p>
-          <p>一樣被賦予一些些瘋狂的人。</p>
-          <footer class="quote__author">—孫燕姿</footer>
+          <p>{{ $t('quote.line1') }}</p>
+          <p>{{ $t('quote.line2') }}</p>
+          <p>{{ $t('quote.line3') }}</p>
+          <p>{{ $t('quote.line4') }}</p>
+          <footer class="quote__author">{{ $t('quote.author') }}</footer>
         </blockquote>
       </div>
     </div>

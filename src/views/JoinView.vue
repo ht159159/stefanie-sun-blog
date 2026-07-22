@@ -8,44 +8,42 @@
     </div>
     <div class="page__content">
       <div class="join-form-wrap">
-        <h2 class="join-form-wrap__title">加入孫燕姿官方粉絲團</h2>
-        <p class="join-form-wrap__desc">
-          訂閱最新音樂資訊、演唱會消息與獨家內容，第一時間掌握所有動態。
-        </p>
+        <h2 class="join-form-wrap__title">{{ $t('join.title') }}</h2>
+        <p class="join-form-wrap__desc">{{ $t('join.desc') }}</p>
         <form class="join-form" @submit.prevent="handleSubmit">
           <div class="join-form__row">
             <div class="join-form__field">
-              <label>姓名</label>
-              <input v-model="form.name" type="text" placeholder="您的姓名" required />
+              <label>{{ $t('join.name') }}</label>
+              <input v-model="form.name" type="text" :placeholder="$t('join.namePlaceholder')" required />
             </div>
             <div class="join-form__field">
-              <label>電子郵件</label>
+              <label>{{ $t('join.email') }}</label>
               <input v-model="form.email" type="email" placeholder="your@email.com" required />
             </div>
           </div>
           <div class="join-form__field">
-            <label>所在地區</label>
+            <label>{{ $t('join.region') }}</label>
             <select v-model="form.region">
-              <option value="">請選擇</option>
-              <option value="tw">台灣</option>
-              <option value="hk">香港</option>
-              <option value="sg">新加坡</option>
-              <option value="cn">中國大陸</option>
-              <option value="other">其他</option>
+              <option value="">{{ $t('join.regionDefault') }}</option>
+              <option value="tw">{{ $t('join.tw') }}</option>
+              <option value="hk">{{ $t('join.hk') }}</option>
+              <option value="sg">{{ $t('join.sg') }}</option>
+              <option value="cn">{{ $t('join.cn') }}</option>
+              <option value="other">{{ $t('join.other') }}</option>
             </select>
           </div>
           <div class="join-form__checkboxes">
             <label class="checkbox">
               <input v-model="form.subscribeNews" type="checkbox" />
-              <span>訂閱最新音樂消息</span>
+              <span>{{ $t('join.subscribeNews') }}</span>
             </label>
             <label class="checkbox">
               <input v-model="form.subscribeConcert" type="checkbox" />
-              <span>訂閱演唱會資訊</span>
+              <span>{{ $t('join.subscribeConcert') }}</span>
             </label>
           </div>
           <button type="submit" class="join-form__submit" :disabled="submitted">
-            {{ submitted ? '已成功訂閱！' : '立即加入' }}
+            {{ submitted ? $t('join.submitted') : $t('join.submit') }}
           </button>
         </form>
       </div>

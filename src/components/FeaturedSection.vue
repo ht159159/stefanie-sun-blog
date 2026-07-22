@@ -5,15 +5,9 @@
         <img src="https://picsum.photos/seed/dance/600/500" alt="跳舞的梵谷" />
       </div>
       <div class="featured__content">
-        <h2 class="featured__title">跳舞的梵谷</h2>
-        <p class="featured__text">
-          I have hinted that I would often jerk poor Queequeg from between the whale and the
-          ship—where he would occasionally fall, from the incessant rolling and swaying of both.
-          But this was not the only jamming jeopardy he was exposed to. Unappalled by the massacre
-          made upon them during the night, the sharks now freshly and more keenly allured by the
-          before pent blood which began to flow from the...
-        </p>
-        <RouterLink to="/music" class="featured__btn">Watch More</RouterLink>
+        <h2 class="featured__title">{{ $t('featured.title') }}</h2>
+        <p class="featured__text">{{ $t('featured.text') }}</p>
+        <RouterLink to="/music" class="featured__btn">{{ $t('featured.btn') }}</RouterLink>
       </div>
     </div>
   </section>

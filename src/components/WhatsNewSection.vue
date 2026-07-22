@@ -5,7 +5,7 @@
         <div class="card__icon">
           <component :is="iconComponent(item.icon)" />
         </div>
-        <h3 class="card__title">{{ item.title }}</h3>
+        <h3 class="card__title">{{ $t('news.title') }}</h3>
         <p class="card__body">{{ item.body }}</p>
       </div>
     </div>
