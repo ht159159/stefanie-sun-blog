@@ -1,0 +1,76 @@
+{
+  "chartTitle": "華語單曲日榜",
+  "updatedAt": "2026-07-24T07:47:58.915Z",
+  "tracks": [
+    {
+      "rank": 1,
+      "name": "沒有人像我一樣 - 影集《欠妳的那場婚禮》主題曲",
+      "artist": "宇宙人 (Cosmos People)",
+      "cover": "https://i.kfs.io/album/global/294848912,0v1/fit/160x160.jpg",
+      "url": "https://www.kkbox.com/tw/tc/song/4njo1hg43TYurFIZjC"
+    },
+    {
+      "rank": 2,
+      "name": "離開我的依賴",
+      "artist": "王艷薇 (Evangeline)",
+      "cover": "https://i.kfs.io/album/tw/69206709,0v1/fit/160x160.jpg",
+      "url": "https://www.kkbox.com/tw/tc/song/9ZH06Yn-s_ZpFJYVjQ"
+    },
+    {
+      "rank": 3,
+      "name": "甲乙丙丁 - 你我怎麼兩清",
+      "artist": "李佳薇 (Jess Lee)",
+      "cover": "https://i.kfs.io/album/global/295320632,0v2/fit/160x160.jpg",
+      "url": "https://www.kkbox.com/tw/tc/song/GptIJ2y--IKc1ewMvC"
+    },
+    {
+      "rank": 4,
+      "name": "綿綿無絕期",
+      "artist": "黃奇斌",
+      "cover": "https://i.kfs.io/album/global/295417051,0v1/fit/160x160.jpg",
+      "url": "https://www.kkbox.com/tw/tc/song/4mF-SIg3f387qJrpfs"
+    },
+    {
+      "rank": 5,
+      "name": "幸福在歌唱 - 電影《陽光女子合唱團》幸福版主題曲",
+      "artist": "A-Lin",
+      "cover": "https://i.kfs.io/album/global/287649251,0v3/fit/160x160.jpg",
+      "url": "https://www.kkbox.com/tw/tc/song/D-jLjjQmldMin6-umY"
+    },
+    {
+      "rank": 6,
+      "name": "一直下",
+      "artist": "陳宇祥",
+      "cover": "https://i.kfs.io/album/global/295420634,0v1/fit/160x160.jpg",
+      "url": "https://www.kkbox.com/tw/tc/song/9Y2f0uR-tUrZ1zl_q4"
+    },
+    {
+      "rank": 7,
+      "name": "看著我的眼睛說",
+      "artist": "張遠",
+      "cover": "https://i.kfs.io/album/global/280657750,0v1/fit/160x160.jpg",
+      "url": "https://www.kkbox.com/tw/tc/song/GoiHhDGwV7_OegDFh_"
+    },
+    {
+      "rank": 8,
+      "name": "她已不再是那個女孩",
+      "artist": "DIOR 大穎",
+      "cover": "https://i.kfs.io/album/global/295143886,0v1/fit/160x160.jpg",
+      "url": "https://www.kkbox.com/tw/tc/song/HYT2GXcIzKb7fW3pXU"
+    },
+    {
+      "rank": 9,
+      "name": "海嶼你",
+      "artist": "马也Crabbit, Cole先生",
+      "cover": "https://i.kfs.io/album/global/223493591,0v1/fit/160x160.jpg",
+      "url": "https://www.kkbox.com/tw/tc/song/9XjRo9xi3wYrBpOzqC"
+    },
+    {
+      "rank": 10,
+      "name": "太陽與地球",
+      "artist": "盧廣仲 (Crowd Lu)",
+      "cover": "https://i.kfs.io/album/global/284812128,0v5/fit/160x160.jpg",
+      "url": "https://www.kkbox.com/tw/tc/song/0spVFXYiDz1b8uI2zi"
+    }
+  ]
+}

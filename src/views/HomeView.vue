@@ -3,6 +3,7 @@
     <HeroSection />
     <WhatsNewSection />
     <FeaturedSection />
+    <ChartSection />
     <CardGrid />
   </main>
 </template>
@@ -11,5 +12,6 @@
 import HeroSection from '@/components/HeroSection.vue'
 import WhatsNewSection from '@/components/WhatsNewSection.vue'
 import FeaturedSection from '@/components/FeaturedSection.vue'
+import ChartSection from '@/components/ChartSection.vue'
 import CardGrid from '@/components/CardGrid.vue'
 </script>
