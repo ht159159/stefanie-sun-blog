@@ -35,11 +35,11 @@ async function getChartTracks(accessToken, playlistId, territory) {
   return res.json()
 }
 
-export async function fetchChartData(territory = 'TW') {
+export async function fetchChartData(territory = 'TW', chartTitle = CHART_TITLE) {
   const accessToken = await getAccessToken()
   const charts = await getCharts(accessToken, territory)
-  const target = charts.data.find((c) => c.title === CHART_TITLE)
-  if (!target) throw new Error(`找不到榜單：${CHART_TITLE}`)
+  const target = charts.data.find((c) => c.title === chartTitle)
+  if (!target) throw new Error(`找不到榜單：${chartTitle}`)
 
   const tracks = await getChartTracks(accessToken, target.id, territory)
 

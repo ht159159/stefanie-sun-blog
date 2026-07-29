@@ -3,6 +3,7 @@ import vue from '@vitejs/plugin-vue'
 import { fileURLToPath, URL } from 'node:url'
 import { fetchChartData } from './api/_lib/kkbox.js'
 import { fetchYtChartData } from './api/_lib/youtube.js'
+import { fetchComboChartData } from './api/_lib/comboChart.js'
 
 // 本機 `npm run dev` / `npm run preview` 用的 /api/charts 端點，
 // 邏輯跟正式部署在 Vercel 上的 api/charts.js 共用同一份 api/_lib/kkbox.js
@@ -60,6 +61,36 @@ function ytChartApi() {
   }
 }
 
+// 本機 `npm run dev` / `npm run preview` 用的 /api/combo-chart 端點，
+// 邏輯跟正式部署在 Vercel 上的 api/comboChart.js 共用同一份 api/_lib/comboChart.js
+function comboChartApi() {
+  const handler = async (req, res) => {
+    try {
+      const params = new URL(req.url, 'http://localhost').searchParams
+      const category = params.get('category') || 'mandarin'
+      const territory = params.get('territory') || 'TW'
+      const data = await fetchComboChartData(category, territory)
+      res.setHeader('Content-Type', 'application/json')
+      res.setHeader('Cache-Control', 'no-store')
+      res.end(JSON.stringify(data))
+    } catch (err) {
+      res.statusCode = 502
+      res.setHeader('Content-Type', 'application/json')
+      res.end(JSON.stringify({ error: err.message }))
+    }
+  }
+
+  return {
+    name: 'combo-chart-api',
+    configureServer(server) {
+      server.middlewares.use('/api/combo-chart', handler)
+    },
+    configurePreviewServer(server) {
+      server.middlewares.use('/api/combo-chart', handler)
+    }
+  }
+}
+
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   process.env.KKBOX_CLIENT_ID = env.KKBOX_CLIENT_ID
@@ -67,7 +98,7 @@ export default defineConfig(({ mode }) => {
   process.env.YOUTUBE_API_KEY = env.YOUTUBE_API_KEY
 
   return {
-    plugins: [vue(), kkboxChartsApi(), ytChartApi()],
+    plugins: [vue(), kkboxChartsApi(), ytChartApi(), comboChartApi()],
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url))

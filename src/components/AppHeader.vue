@@ -70,6 +70,7 @@ const navItems = [
   { name: 'music', label: 'Music', path: '/music' },
   { name: 'picture', label: 'Picture', path: '/picture' },
   { name: 'ytChart', label: 'YT Chart', path: '/yt-chart' },
+  { name: 'comboChart', label: 'Chart Play', path: '/combo-chart' },
   { name: 'join', label: 'JoinSheep', path: '/join' }
 ]
 

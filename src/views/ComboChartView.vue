@@ -1,33 +1,43 @@
 <template>
   <main class="page">
     <div class="page__hero">
-      <img src="https://picsum.photos/seed/ytchart/1200/400" alt="YT Chart" />
+      <img src="https://picsum.photos/seed/combochart/1200/400" alt="Combo Chart" />
       <div class="page__hero-overlay">
-        <h1>YT Chart</h1>
+        <h1>Chart Play</h1>
       </div>
     </div>
     <div class="page__content">
-      <h2 class="section-title">{{ chartData?.chartTitle ?? 'YouTube 熱門音樂影片' }}</h2>
+      <div class="tabs">
+        <button
+          v-for="tab in tabs"
+          :key="tab.value"
+          class="tabs__btn"
+          :class="{ 'tabs__btn--active': category === tab.value }"
+          @click="switchCategory(tab.value)"
+        >{{ tab.label }}</button>
+      </div>
+
+      <h2 class="section-title">{{ chartData?.chartTitle ?? '排行榜' }}</h2>
 
       <p v-if="loading" class="status">載入排行榜中…</p>
       <p v-else-if="error" class="status">排行榜載入失敗：{{ error }}</p>
       <div v-else-if="chartData" class="chart-layout">
         <ol class="chart-list">
           <li
-            v-for="video in chartData.videos"
-            :key="video.rank"
+            v-for="track in chartData.tracks"
+            :key="track.rank"
             class="chart-item"
-            :class="{ 'chart-item--active': selectedVideo?.videoId === video.videoId }"
-            @click="selectedVideo = video"
+            :class="{ 'chart-item--active': selectedTrack?.rank === track.rank, 'chart-item--disabled': !track.videoId }"
+            @click="track.videoId && (selectedTrack = track)"
           >
-            <span class="chart-item__rank">{{ video.rank }}</span>
+            <span class="chart-item__rank">{{ track.rank }}</span>
             <span class="chart-item__thumb">
-              <img :src="video.thumbnail" :alt="video.title" />
+              <img :src="track.cover" :alt="track.name" />
             </span>
             <div class="chart-item__info">
-              <span class="chart-item__title">{{ video.title }}</span>
-              <p class="chart-item__channel">{{ video.channel }}</p>
-              <p class="chart-item__views">{{ video.viewCount.toLocaleString() }} 次觀看</p>
+              <span class="chart-item__title">{{ track.name }}</span>
+              <p class="chart-item__artist">{{ track.artist }}</p>
+              <p v-if="!track.videoId" class="chart-item__no-video">找不到對應 MV</p>
             </div>
           </li>
         </ol>
@@ -35,19 +45,17 @@
         <div class="chart-player">
           <div class="chart-player__frame">
             <iframe
-              v-if="selectedVideo"
-              :key="selectedVideo.videoId"
-              :src="`https://www.youtube.com/embed/${selectedVideo.videoId}?autoplay=1`"
+              v-if="selectedTrack?.videoId"
+              :key="selectedTrack.videoId"
+              :src="`https://www.youtube.com/embed/${selectedTrack.videoId}?autoplay=1`"
               title="YouTube video player"
               frameborder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowfullscreen
             ></iframe>
+            <div v-else class="chart-player__empty">選一首左邊有 MV 的歌來播放</div>
           </div>
-          <p v-if="selectedVideo" class="chart-player__title">{{ selectedVideo.title }}</p>
-          <a v-if="selectedVideo" :href="selectedVideo.url" target="_blank" rel="noopener" class="chart-player__link">
-            在 YouTube 開啟
-          </a>
+          <p v-if="selectedTrack" class="chart-player__title">{{ selectedTrack.name }} — {{ selectedTrack.artist }}</p>
         </div>
       </div>
     </div>
@@ -57,23 +65,40 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 
+const tabs = [
+  { value: 'mandarin', label: '華語' },
+  { value: 'western', label: '西洋' }
+]
+
+const category = ref('mandarin')
 const chartData = ref(null)
 const loading = ref(true)
 const error = ref(null)
-const selectedVideo = ref(null)
+const selectedTrack = ref(null)
 
-onMounted(async () => {
+async function loadChart() {
+  loading.value = true
+  error.value = null
+  selectedTrack.value = null
   try {
-    const res = await fetch('/api/yt-chart')
+    const res = await fetch(`/api/combo-chart?category=${category.value}`)
     if (!res.ok) throw new Error((await res.json()).error ?? res.statusText)
     chartData.value = await res.json()
-    selectedVideo.value = chartData.value.videos[0] ?? null
+    selectedTrack.value = chartData.value.tracks.find((t) => t.videoId) ?? null
   } catch (err) {
     error.value = err.message
   } finally {
     loading.value = false
   }
-})
+}
+
+function switchCategory(value) {
+  if (category.value === value) return
+  category.value = value
+  loadChart()
+}
+
+onMounted(loadChart)
 </script>
 
 <style lang="scss" scoped>
@@ -112,6 +137,35 @@ onMounted(async () => {
     @include container;
     padding-top: 64px;
     padding-bottom: 80px;
+  }
+}
+
+.tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+
+  &__btn {
+    padding: 8px 20px;
+    font-family: $font-sans;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: $text-body;
+    border: 2px solid rgba($black, 0.15);
+    background: $white;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+
+    &:hover {
+      border-color: $primary;
+      color: $primary;
+    }
+
+    &--active {
+      background: $primary;
+      border-color: $primary;
+      color: $white;
+    }
   }
 }
 
@@ -170,6 +224,15 @@ onMounted(async () => {
     background: $gray-light;
   }
 
+  &--disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+
+    &:hover {
+      background: none;
+    }
+  }
+
   &__rank {
     width: 32px;
     flex-shrink: 0;
@@ -185,8 +248,8 @@ onMounted(async () => {
     display: block;
 
     img {
-      width: 120px;
-      height: 68px;
+      width: 56px;
+      height: 56px;
       object-fit: cover;
     }
   }
@@ -210,13 +273,13 @@ onMounted(async () => {
     color: $primary;
   }
 
-  &__channel {
+  &__artist {
     font-size: 0.85rem;
     color: $text-body;
   }
 
-  &__views {
-    font-size: 0.8rem;
+  &__no-video {
+    font-size: 0.75rem;
     color: $gray-mid;
   }
 }
@@ -247,24 +310,22 @@ onMounted(async () => {
     }
   }
 
+  &__empty {
+    position: absolute;
+    inset: 0;
+    @include flex-center;
+    color: rgba($white, 0.6);
+    font-size: 0.85rem;
+    text-align: center;
+    padding: 0 24px;
+  }
+
   &__title {
     margin-top: 12px;
     font-family: $font-sans;
     font-size: 0.95rem;
     font-weight: 700;
     color: $text-dark;
-  }
-
-  &__link {
-    display: inline-block;
-    margin-top: 6px;
-    font-size: 0.8rem;
-    color: $text-body;
-    text-decoration: underline;
-
-    &:hover {
-      color: $primary;
-    }
   }
 }
 </style>
