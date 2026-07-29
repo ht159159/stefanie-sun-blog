@@ -69,6 +69,7 @@ const navItems = [
   { name: 'about', label: 'About', path: '/about' },
   { name: 'music', label: 'Music', path: '/music' },
   { name: 'picture', label: 'Picture', path: '/picture' },
+  { name: 'ytChart', label: 'YT Chart', path: '/yt-chart' },
   { name: 'join', label: 'JoinSheep', path: '/join' }
 ]
 
