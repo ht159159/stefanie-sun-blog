@@ -34,7 +34,7 @@ function kkboxChartsApi() {
 }
 
 // 本機 `npm run dev` / `npm run preview` 用的 /api/yt-chart 端點，
-// 邏輯跟正式部署在 Vercel 上的 api/ytChart.js 共用同一份 api/_lib/youtube.js
+// 邏輯跟正式部署在 Vercel 上的 api/yt-chart.js 共用同一份 api/_lib/youtube.js
 function ytChartApi() {
   const handler = async (req, res) => {
     try {
@@ -62,7 +62,7 @@ function ytChartApi() {
 }
 
 // 本機 `npm run dev` / `npm run preview` 用的 /api/combo-chart 端點，
-// 邏輯跟正式部署在 Vercel 上的 api/comboChart.js 共用同一份 api/_lib/comboChart.js
+// 邏輯跟正式部署在 Vercel 上的 api/combo-chart.js 共用同一份 api/_lib/comboChart.js
 function comboChartApi() {
   const handler = async (req, res) => {
     try {

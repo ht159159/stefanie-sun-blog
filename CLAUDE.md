@@ -39,8 +39,8 @@ Vue 3 + Vite 專案。
   - 注意：這不是 YouTube Music 官方排行榜（無串流播放量加權等演算法），YouTube 沒有公開該榜單的 API；`videos.list` 的 mostPopular chart 是唯一有官方文件支援、穩定可用的替代方案
 - 架構跟 KKBOX 排行榜一致:
   - `api/_lib/youtube.js` — 抓資料的核心邏輯
-  - `api/ytChart.js` — Vercel Serverless Function，正式站的 `/api/yt-chart` 路由
-  - `vite.config.js` 的 `ytChartApi` plugin — 本機 `npm run dev` / `npm run preview` 用的對應路由，跟 `api/ytChart.js` 共用同一份 `_lib/youtube.js`
+  - `api/yt-chart.js` — Vercel Serverless Function，正式站的 `/api/yt-chart` 路由（**檔名必須跟路由一致**，Vercel 用檔名自動對應路由，跟本機 vite plugin 手動掛路徑不同）
+  - `vite.config.js` 的 `ytChartApi` plugin — 本機 `npm run dev` / `npm run preview` 用的對應路由，跟 `api/yt-chart.js` 共用同一份 `_lib/youtube.js`
   - `src/views/YtChartView.vue` — 進頁面時 `fetch('/api/yt-chart')`
 - 需要的環境變數: `YOUTUBE_API_KEY`
   - 本機開發: 寫在專案根目錄 `.env`（已加入 `.gitignore`，不會進 git）
@@ -67,7 +67,7 @@ Vue 3 + Vite 專案。
 - 架構:
   - `api/_lib/comboChart.js` — 核心邏輯，呼叫 `kkbox.js` 的 `fetchChartData(territory, chartTitle)` 拿榜單，再對每首歌呼叫 `youtube.js` 的 `searchVideoId(query)` 比對 MV
   - `api/_lib/youtube.js` 的 `searchVideoId()` — 用 YouTube Data API 的 `search.list`（`q=歌手 歌名`、`videoCategoryId=10`）搜尋最相關的一支影片
-  - `api/comboChart.js` — Vercel Serverless Function，正式站路由 `/api/combo-chart?category=mandarin|western`
+  - `api/combo-chart.js` — Vercel Serverless Function，正式站路由 `/api/combo-chart?category=mandarin|western`（檔名需跟路由一致，見上面 yt-chart 的說明）
   - `vite.config.js` 的 `comboChartApi` plugin — 本機 dev 對應路由
   - `src/views/ComboChartView.vue` — 分頁切換 + 左清單右播放器（跟 `/yt-chart` 同一套播放器 UI），某首歌若找不到對應 MV（`videoId` 為 `null`）該項目會顯示「找不到對應 MV」且不能點
 - **quota 注意**：`search.list` 每次呼叫要花 **100 units**（`videos.list` 只要 1 unit），一份榜單 10 首歌 = 每次刷新約 1000 units，免費額度一天 10,000 units 大約能刷新 10 次。`searchVideoId()` 內建一個 6 小時 TTL 的記憶體快取（同一首歌短時間內不會重複搜尋），但這個快取只在同一個 process 存活期間有效——本機 `npm run dev` 開著沒關就有效，但 **Vercel Serverless Function 每次冷啟動快取會重置**，正式站流量大的話 quota 消耗會比預期快，這是練習作品先不處理的已知限制，真的要上線用的話需要換成資料庫或 KV 做持久化快取
