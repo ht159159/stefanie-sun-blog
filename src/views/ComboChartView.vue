@@ -9,9 +9,19 @@
     <div class="page__content">
       <div class="tabs">
         <button
-          v-for="tab in tabs"
+          v-for="tab in chartTypeTabs"
           :key="tab.value"
           class="tabs__btn"
+          :class="{ 'tabs__btn--active': chartType === tab.value }"
+          @click="switchChartType(tab.value)"
+        >{{ tab.label }}</button>
+      </div>
+
+      <div class="tabs tabs--sub">
+        <button
+          v-for="tab in categoryTabs"
+          :key="tab.value"
+          class="tabs__btn tabs__btn--sub"
           :class="{ 'tabs__btn--active': category === tab.value }"
           @click="switchCategory(tab.value)"
         >{{ tab.label }}</button>
@@ -65,11 +75,16 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 
-const tabs = [
+const chartTypeTabs = [
+  { value: 'single', label: '單曲' },
+  { value: 'new', label: '新歌' }
+]
+const categoryTabs = [
   { value: 'mandarin', label: '華語' },
   { value: 'western', label: '西洋' }
 ]
 
+const chartType = ref('single')
 const category = ref('mandarin')
 const chartData = ref(null)
 const loading = ref(true)
@@ -81,7 +96,7 @@ async function loadChart() {
   error.value = null
   selectedTrack.value = null
   try {
-    const res = await fetch(`/api/combo-chart?category=${category.value}`)
+    const res = await fetch(`/api/combo-chart?chartType=${chartType.value}&category=${category.value}`)
     if (!res.ok) throw new Error((await res.json()).error ?? res.statusText)
     chartData.value = await res.json()
     selectedTrack.value = chartData.value.tracks.find((t) => t.videoId) ?? null
@@ -90,6 +105,12 @@ async function loadChart() {
   } finally {
     loading.value = false
   }
+}
+
+function switchChartType(value) {
+  if (chartType.value === value) return
+  chartType.value = value
+  loadChart()
 }
 
 function switchCategory(value) {
@@ -145,6 +166,10 @@ onMounted(loadChart)
   gap: 12px;
   margin-bottom: 24px;
 
+  &--sub {
+    margin-bottom: 32px;
+  }
+
   &__btn {
     padding: 8px 20px;
     font-family: $font-sans;
@@ -165,6 +190,12 @@ onMounted(loadChart)
       background: $primary;
       border-color: $primary;
       color: $white;
+    }
+
+    &--sub {
+      padding: 6px 16px;
+      font-size: 0.8rem;
+      border-width: 1px;
     }
   }
 }

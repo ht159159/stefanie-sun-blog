@@ -63,12 +63,12 @@ Vue 3 + Vite 專案。
 ## KKBOX + YouTube 結合版排行榜（獨立頁面 `/combo-chart`）
 
 - 背景：YouTube 官方沒有「華語/西洋」這種語言分類的排行榜（見上面 `/yt-chart` 的限制），但 KKBOX 有官方定義好的日榜可以拆分類；這個功能用 **KKBOX 榜單當排名來源**，再逐首用「歌手 歌名」去 YouTube 搜尋比對出對應 MV，讓使用者可以直接在頁面上點播放
-- 頁面有「華語 / 西洋」分頁切換，分頁對應 KKBOX 的「華語單曲日榜」「西洋單曲日榜」
+- 頁面有兩層分頁：上層「單曲 / 新歌」（`chartType`），下層「華語 / 西洋」（`category`），交叉對應 KKBOX 的「華語單曲日榜」「西洋單曲日榜」「華語新歌日榜」「西洋新歌日榜」四種榜單
 - 架構:
-  - `api/_lib/comboChart.js` — 核心邏輯，呼叫 `kkbox.js` 的 `fetchChartData(territory, chartTitle)` 拿榜單，再對每首歌呼叫 `youtube.js` 的 `searchVideoId(query)` 比對 MV
+  - `api/_lib/comboChart.js` — 核心邏輯，`CHART_TITLES[chartType][category]` 查出榜單名稱，呼叫 `kkbox.js` 的 `fetchChartData(territory, chartTitle)` 拿榜單，再對每首歌呼叫 `youtube.js` 的 `searchVideoId(query)` 比對 MV；`fetchComboChartData(chartType, category, territory)`
   - `api/_lib/youtube.js` 的 `searchVideoId()` — 用 YouTube Data API 的 `search.list`（`q=歌手 歌名`、`videoCategoryId=10`）搜尋最相關的一支影片
-  - `api/combo-chart.js` — Vercel Serverless Function，正式站路由 `/api/combo-chart?category=mandarin|western`（檔名需跟路由一致，見上面 yt-chart 的說明）
+  - `api/combo-chart.js` — Vercel Serverless Function，正式站路由 `/api/combo-chart?chartType=single|new&category=mandarin|western`（檔名需跟路由一致，見上面 yt-chart 的說明）
   - `vite.config.js` 的 `comboChartApi` plugin — 本機 dev 對應路由
-  - `src/views/ComboChartView.vue` — 分頁切換 + 左清單右播放器（跟 `/yt-chart` 同一套播放器 UI），某首歌若找不到對應 MV（`videoId` 為 `null`）該項目會顯示「找不到對應 MV」且不能點
+  - `src/views/ComboChartView.vue` — 兩層分頁切換 + 左清單右播放器（跟 `/yt-chart` 同一套播放器 UI），某首歌若找不到對應 MV（`videoId` 為 `null`）該項目會顯示「找不到對應 MV」且不能點
 - **quota 注意**：`search.list` 每次呼叫要花 **100 units**（`videos.list` 只要 1 unit），一份榜單 10 首歌 = 每次刷新約 1000 units，免費額度一天 10,000 units 大約能刷新 10 次。`searchVideoId()` 內建一個 6 小時 TTL 的記憶體快取（同一首歌短時間內不會重複搜尋），但這個快取只在同一個 process 存活期間有效——本機 `npm run dev` 開著沒關就有效，但 **Vercel Serverless Function 每次冷啟動快取會重置**，正式站流量大的話 quota 消耗會比預期快，這是練習作品先不處理的已知限制，真的要上線用的話需要換成資料庫或 KV 做持久化快取
 - 這個功能同時需要 `KKBOX_CLIENT_ID`、`KKBOX_CLIENT_SECRET`、`YOUTUBE_API_KEY` 三組環境變數都設定好才能動

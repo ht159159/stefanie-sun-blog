@@ -4,14 +4,20 @@
 import { fetchChartData } from './kkbox.js'
 import { searchVideoId } from './youtube.js'
 
-const CATEGORY_CHART_TITLES = {
-  mandarin: '華語單曲日榜',
-  western: '西洋單曲日榜'
+const CHART_TITLES = {
+  single: {
+    mandarin: '華語單曲日榜',
+    western: '西洋單曲日榜'
+  },
+  new: {
+    mandarin: '華語新歌日榜',
+    western: '西洋新歌日榜'
+  }
 }
 
-export async function fetchComboChartData(category = 'mandarin', territory = 'TW') {
-  const chartTitle = CATEGORY_CHART_TITLES[category]
-  if (!chartTitle) throw new Error(`不支援的分類：${category}`)
+export async function fetchComboChartData(chartType = 'single', category = 'mandarin', territory = 'TW') {
+  const chartTitle = CHART_TITLES[chartType]?.[category]
+  if (!chartTitle) throw new Error(`不支援的分類：${chartType}/${category}`)
 
   const kkboxData = await fetchChartData(territory, chartTitle)
 

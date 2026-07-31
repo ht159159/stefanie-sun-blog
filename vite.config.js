@@ -67,9 +67,10 @@ function comboChartApi() {
   const handler = async (req, res) => {
     try {
       const params = new URL(req.url, 'http://localhost').searchParams
+      const chartType = params.get('chartType') || 'single'
       const category = params.get('category') || 'mandarin'
       const territory = params.get('territory') || 'TW'
-      const data = await fetchComboChartData(category, territory)
+      const data = await fetchComboChartData(chartType, category, territory)
       res.setHeader('Content-Type', 'application/json')
       res.setHeader('Cache-Control', 'no-store')
       res.end(JSON.stringify(data))
